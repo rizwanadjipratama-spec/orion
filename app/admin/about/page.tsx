@@ -32,7 +32,7 @@ export default function AdminAboutPage() {
       const allowed = await hasAdminAccess()
 
       if (!allowed) {
-        router.replace("/")
+        router.replace("/login")
         return
       }
 

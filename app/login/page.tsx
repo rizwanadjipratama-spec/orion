@@ -19,6 +19,9 @@ export default function LoginPage() {
         <p className="font-mono text-[0.75rem] uppercase tracking-[0.16em] text-[var(--signal)]">Secure access</p>
         <h1 className="mt-4 font-display text-4xl text-[var(--text-primary)]">{siteConfig.brand.adminName}</h1>
         <p className="mt-4 text-[var(--muted)]">Authenticate with GitHub to enter the Saintce admin shell.</p>
+        <p className="mt-3 text-sm text-[var(--muted)]">
+          If login succeeds but admin still does not open, bootstrap your owner row in `public.admin_users`.
+        </p>
 
         <button onClick={loginWithGithub} className="saintce-button mt-8 w-full">
           Login with GitHub

@@ -71,7 +71,7 @@ export default function AdminClientsPage() {
       const allowed = await hasAdminAccess()
 
       if (!allowed) {
-        router.replace("/")
+        router.replace("/login")
         return
       }
 
