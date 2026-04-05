@@ -28,7 +28,7 @@ export async function getPublicAboutContent() {
           apikey: anonKey,
           Authorization: `Bearer ${anonKey}`,
         },
-        next: { revalidate: 300 },
+        cache: "no-store",
       }
     )
 

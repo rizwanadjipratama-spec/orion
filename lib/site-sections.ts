@@ -252,7 +252,7 @@ export async function getPublicSiteSections() {
           apikey: anonKey,
           Authorization: `Bearer ${anonKey}`,
         },
-        next: { revalidate: 300 },
+        cache: "no-store",
       }
     )
 
