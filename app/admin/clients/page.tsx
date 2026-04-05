@@ -12,6 +12,7 @@ import {
   type ClientStatus,
 } from "@/lib/clients"
 import { hasAdminAccess } from "@/lib/admin-auth"
+import { getErrorMessage } from "@/lib/errors"
 
 interface ClientForm {
   name: string
@@ -50,7 +51,7 @@ export default function AdminClientsPage() {
       }
     } catch (error) {
       if (requestId === requestIdRef.current) {
-        setMessage(error instanceof Error ? error.message : "Unable to load clients.")
+        setMessage(getErrorMessage(error, "Unable to load clients."))
       }
     } finally {
       if (requestId === requestIdRef.current) {
@@ -124,7 +125,7 @@ export default function AdminClientsPage() {
       resetForm()
       await loadClients()
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unable to save client.")
+      setMessage(getErrorMessage(error, "Unable to save client."))
     } finally {
       setSubmitting(false)
     }
@@ -143,7 +144,7 @@ export default function AdminClientsPage() {
         setMessage("Client deleted.")
         await loadClients()
       } catch (error) {
-        setMessage(error instanceof Error ? error.message : "Unable to delete client.")
+        setMessage(getErrorMessage(error, "Unable to delete client."))
       }
     },
     [loadClients]

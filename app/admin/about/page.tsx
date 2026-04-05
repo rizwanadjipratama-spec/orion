@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ensureAboutSection, updateAboutSection, type AboutSection } from "@/lib/about"
 import { hasAdminAccess } from "@/lib/admin-auth"
+import { getErrorMessage } from "@/lib/errors"
 import { supabase } from "@/lib/supabase"
 
 export default function AdminAboutPage() {
@@ -19,7 +20,7 @@ export default function AdminAboutPage() {
       setData(about)
       setMessage(null)
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unable to load about content.")
+      setMessage(getErrorMessage(error, "Unable to load about content."))
     } finally {
       setLoading(false)
     }
@@ -74,7 +75,7 @@ export default function AdminAboutPage() {
       setData(saved)
       setMessage("About content saved.")
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unable to save content.")
+      setMessage(getErrorMessage(error, "Unable to save content."))
     } finally {
       setSaving(false)
     }
