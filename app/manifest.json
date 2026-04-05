@@ -1,6 +1,6 @@
 {
-  "name": "Saintce",
-  "short_name": "Saintce",
+  "name": "saintce",
+  "short_name": "saintce",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#111111",
-  "background_color": "#0d0d0f",
+  "theme_color": "#09090B",
+  "background_color": "#09090B",
   "display": "standalone"
 }

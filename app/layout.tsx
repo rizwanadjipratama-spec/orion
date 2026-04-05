@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   title: siteConfig.copy.title,
   description: siteConfig.copy.description,
   applicationName: siteConfig.brand.name,
+  appleWebApp: {
+    title: siteConfig.brand.name.toLowerCase(),
+  },
 }
 
 export const viewport: Viewport = {
