@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { ensureAboutSection, updateAboutSection, type AboutSection } from "@/lib/about"
 import { hasAdminAccess } from "@/lib/admin-auth"
 import { getErrorMessage } from "@/lib/errors"
 import {
@@ -17,11 +18,16 @@ export default function AdminSectionsPage() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [sections, setSections] = useState<SiteSectionsContent>(getDefaultSiteSections())
+  const [about, setAbout] = useState<AboutSection | null>(null)
 
   const loadSections = useCallback(async () => {
     try {
-      const data = await fetchAdminSiteSections()
+      const [data, aboutSection] = await Promise.all([
+        fetchAdminSiteSections(),
+        ensureAboutSection(),
+      ])
       setSections(data)
+      setAbout(aboutSection)
       setMessage(null)
     } catch (error) {
       setMessage(getErrorMessage(error, "Unable to load section CMS."))
@@ -114,6 +120,16 @@ export default function AdminSectionsPage() {
           items: [],
           meta: {},
         }),
+        about
+          ? updateAboutSection({
+              id: about.id,
+              title: about.title,
+              subtitle: about.subtitle,
+              paragraph1: about.paragraph1,
+              paragraph2: about.paragraph2,
+              paragraph3: about.paragraph3,
+            })
+          : Promise.resolve(null),
       ])
 
       setMessage("Section CMS saved.")
@@ -122,7 +138,7 @@ export default function AdminSectionsPage() {
     } finally {
       setSaving(false)
     }
-  }, [sections])
+  }, [about, sections])
 
   if (loading) {
     return <div className="text-[var(--muted)]">Loading section CMS...</div>
@@ -192,6 +208,42 @@ export default function AdminSectionsPage() {
               <input value={sections.hero.footerLeft} onChange={(e) => setSections((prev) => ({ ...prev, hero: { ...prev.hero, footerLeft: e.target.value } }))} className="saintce-input" placeholder="Hero footer left" />
               <input value={sections.hero.footerRight} onChange={(e) => setSections((prev) => ({ ...prev, hero: { ...prev.hero, footerRight: e.target.value } }))} className="saintce-input" placeholder="Hero footer right" />
             </div>
+          </div>
+        </section>
+
+        <section className="saintce-inset rounded-[28px] p-6">
+          <h2 className="font-display text-2xl">About</h2>
+          <div className="mt-5 grid gap-4">
+            <input
+              value={about?.title || ""}
+              onChange={(e) => setAbout((prev) => (prev ? { ...prev, title: e.target.value } : prev))}
+              className="saintce-input"
+              placeholder="About headline"
+            />
+            <input
+              value={about?.subtitle || ""}
+              onChange={(e) => setAbout((prev) => (prev ? { ...prev, subtitle: e.target.value } : prev))}
+              className="saintce-input"
+              placeholder="About subtitle"
+            />
+            <textarea
+              value={about?.paragraph1 || ""}
+              onChange={(e) => setAbout((prev) => (prev ? { ...prev, paragraph1: e.target.value } : prev))}
+              className="saintce-input min-h-[140px]"
+              placeholder="About paragraph 1"
+            />
+            <textarea
+              value={about?.paragraph2 || ""}
+              onChange={(e) => setAbout((prev) => (prev ? { ...prev, paragraph2: e.target.value } : prev))}
+              className="saintce-input min-h-[140px]"
+              placeholder="About paragraph 2"
+            />
+            <textarea
+              value={about?.paragraph3 || ""}
+              onChange={(e) => setAbout((prev) => (prev ? { ...prev, paragraph3: e.target.value } : prev))}
+              className="saintce-input min-h-[140px]"
+              placeholder="About paragraph 3"
+            />
           </div>
         </section>
 

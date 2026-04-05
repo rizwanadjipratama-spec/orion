@@ -10,7 +10,6 @@ const MENU = [
   { name: "Overview", href: "/admin" },
   { name: "Sections", href: "/admin/sections" },
   { name: "Clients", href: "/admin/clients" },
-  { name: "About", href: "/admin/about" },
 ]
 
 const ACTIVE_NAV_TRANSITION = {

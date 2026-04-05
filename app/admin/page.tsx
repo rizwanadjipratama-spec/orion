@@ -81,9 +81,6 @@ export default function AdminOverviewPage() {
           <Link href="/admin/clients" className="saintce-button">
             Manage clients
           </Link>
-          <Link href="/admin/about" className="saintce-button saintce-button--ghost">
-            Edit about
-          </Link>
         </div>
       </div>
 
