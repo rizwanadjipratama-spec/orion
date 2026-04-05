@@ -12,7 +12,7 @@ export default function Hero() {
   }, [router])
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col justify-center pt-[clamp(6rem,11vh,8rem)]">
+    <section className="orion-hero-shell relative flex flex-col justify-center">
       <div className="mx-auto w-full max-w-[1400px] px-6 md:px-10">
         <div className="orion-hero">
           <div className="grid gap-12 lg:grid-cols-[1.25fr_0.75fr]">

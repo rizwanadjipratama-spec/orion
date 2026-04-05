@@ -13,10 +13,12 @@
   --muted-strong: rgba(226, 219, 206, 0.82);
   --signal: rgba(245, 203, 140, 0.88);
   --border-soft: rgba(255, 255, 255, 0.09);
+  --site-header-offset: 110px;
 }
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -31,6 +33,14 @@ body {
   font-family: var(--font-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+body,
+input,
+textarea,
+button,
+select {
+  -webkit-text-size-adjust: 100%;
 }
 
 body::before,
@@ -59,6 +69,10 @@ body::after {
 .orion-body > * {
   position: relative;
   z-index: 1;
+}
+
+.orion-page-shell {
+  padding-top: var(--site-header-offset);
 }
 
 h1,
@@ -118,6 +132,12 @@ section {
 .orion-hero {
   padding: clamp(1.4rem, 2vw, 2rem);
   border-radius: 38px;
+}
+
+.orion-hero-shell {
+  min-height: max(42rem, calc(100vh - var(--site-header-offset)));
+  min-height: max(42rem, calc(100lvh - var(--site-header-offset)));
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
 }
 
 .orion-button {
@@ -235,5 +255,24 @@ textarea:-webkit-autofill:focus {
 
   to {
     transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --site-header-offset: 104px;
+  }
+
+  .orion-nav {
+    border-radius: 24px;
+  }
+
+  .orion-panel {
+    border-radius: 28px;
+  }
+
+  .orion-hero-shell {
+    min-height: auto;
+    padding-top: 1rem;
   }
 }

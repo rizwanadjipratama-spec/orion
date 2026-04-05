@@ -1,65 +1,9 @@
-"use client"
-
-import { useEffect, useState } from "react"
 import Section from "@/components/ui/Section"
 import Container from "@/components/ui/Container"
-import { fetchAboutSection } from "@/lib/about"
+import { getPublicAboutContent } from "@/lib/about-server"
 
-interface AboutState {
-  title: string
-  subtitle: string
-  paragraph1: string
-  paragraph2: string
-  paragraph3: string
-}
-
-const EMPTY_STATE: AboutState = {
-  title: "Design the system before scaling the company.",
-  subtitle: "Orion replaces scattered surfaces with one controllable operating layer.",
-  paragraph1:
-    "This build now reads from the live About CMS when content exists, so the public story can be managed directly from Orion Control instead of being hardcoded across the frontend.",
-  paragraph2:
-    "The refactor removes duplicated admin flows and centralizes the data contract, which gives you a cleaner path to expand toward a fuller ERP-style back office.",
-  paragraph3:
-    "Every visible surface is moving toward one rule: fewer abstractions, fewer duplicate queries, and tighter control over performance and behavior.",
-}
-
-export default function About() {
-  const [content, setContent] = useState<AboutState>(EMPTY_STATE)
-
-  useEffect(() => {
-    let active = true
-
-    const load = async () => {
-      try {
-        const data = await fetchAboutSection()
-
-        if (!active || !data) {
-          return
-        }
-
-        const paragraphs = [data.paragraph1, data.paragraph2, data.paragraph3].filter(Boolean)
-
-        setContent({
-          title: data.title || EMPTY_STATE.title,
-          subtitle: data.subtitle || EMPTY_STATE.subtitle,
-          paragraph1: paragraphs[0] || EMPTY_STATE.paragraph1,
-          paragraph2: paragraphs[1] || EMPTY_STATE.paragraph2,
-          paragraph3: paragraphs[2] || EMPTY_STATE.paragraph3,
-        })
-      } catch {
-        if (active) {
-          setContent(EMPTY_STATE)
-        }
-      }
-    }
-
-    void load()
-
-    return () => {
-      active = false
-    }
-  }, [])
+export default async function About() {
+  const content = await getPublicAboutContent()
 
   return (
     <Section id="about">

@@ -2,7 +2,7 @@ import "./globals.css"
 import { Cormorant_Garamond, DM_Sans, DM_Mono } from "next/font/google"
 import MouseLight from "@/components/effects/MouseLight"
 import SmoothScroll from "@/components/providers/SmoothScroll"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { siteConfig } from "@/lib/site-config"
 
 const cormorant = Cormorant_Garamond({
@@ -27,6 +27,13 @@ export const metadata: Metadata = {
   title: siteConfig.copy.title,
   description: siteConfig.copy.description,
   applicationName: siteConfig.brand.name,
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#111114",
 }
 
 export default function RootLayout({

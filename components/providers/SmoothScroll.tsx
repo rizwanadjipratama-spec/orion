@@ -14,11 +14,17 @@ export default function SmoothScroll({
   children: React.ReactNode
 }) {
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const isTouchLikeDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches
+
+    if (prefersReducedMotion || isTouchLikeDevice) {
+      return
+    }
+
     const lenis = new Lenis({
       duration: 1.15,
       smoothWheel: true,
       wheelMultiplier: 1,
-      //smoothTouch: false,
     })
     let rafId = 0
 

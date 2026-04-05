@@ -9,6 +9,12 @@ import { useEffect } from "react"
  */
 export default function MouseLight() {
   useEffect(() => {
+    const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches
+
+    if (!supportsHover) {
+      return
+    }
+
     let rafId = 0
     let pendingX = 0
     let pendingY = 0
