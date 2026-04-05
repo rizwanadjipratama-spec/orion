@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabase"
-import { siteConfig } from "@/lib/site-config"
 
 /**
  * Shared admin access guard.
@@ -11,5 +10,16 @@ export async function hasAdminAccess() {
     return false
   }
 
-  return data.user.email === siteConfig.contact.adminEmail
+  const { data: adminRow, error: adminError } = await supabase
+    .from("admin_users")
+    .select("id")
+    .eq("user_id", data.user.id)
+    .eq("is_active", true)
+    .maybeSingle()
+
+  if (adminError) {
+    return false
+  }
+
+  return Boolean(adminRow)
 }
