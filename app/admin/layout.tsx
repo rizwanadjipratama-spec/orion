@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -8,8 +8,14 @@ import { siteConfig } from "@/lib/site-config"
 
 const MENU = [
   { name: "Overview", href: "/admin" },
+  { name: "Billing", href: "/admin/billing-overview" },
   { name: "Sections", href: "/admin/sections" },
   { name: "Clients", href: "/admin/clients" },
+  { name: "Projects", href: "/admin/projects" },
+  { name: "Services", href: "/admin/services" },
+  { name: "Subscriptions", href: "/admin/subscriptions" },
+  { name: "Invoices", href: "/admin/invoices" },
+  { name: "Payments", href: "/admin/payments" },
 ]
 
 const ACTIVE_NAV_TRANSITION = {
@@ -59,7 +65,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </nav>
 
             <div className="mt-auto border-t border-[var(--border-soft)] pt-5 text-sm text-[var(--muted)]">
-              Single shell. Cleaner queries. Saintce edition.
+              Subscription billing, project ops, and Saintce control in one shell.
             </div>
           </div>
         </aside>

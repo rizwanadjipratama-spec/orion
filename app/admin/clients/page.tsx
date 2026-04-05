@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
@@ -16,17 +16,25 @@ import { getErrorMessage } from "@/lib/errors"
 
 interface ClientForm {
   name: string
+  email: string
+  company_name: string
+  phone: string
   category: string
   description: string
   link: string
+  notes: string
   status: ClientStatus
 }
 
 const INITIAL_FORM: ClientForm = {
   name: "",
+  email: "",
+  company_name: "",
+  phone: "",
   category: "",
   description: "",
   link: "",
+  notes: "",
   status: "live",
 }
 
@@ -45,7 +53,6 @@ export default function AdminClientsPage() {
 
     try {
       const data = await fetchClients({ includeArchived: true })
-
       if (requestId === requestIdRef.current) {
         setClients(data)
       }
@@ -70,7 +77,6 @@ export default function AdminClientsPage() {
 
     const init = async () => {
       const allowed = await hasAdminAccess()
-
       if (!allowed) {
         router.replace("/login")
         return
@@ -113,9 +119,13 @@ export default function AdminClientsPage() {
       await saveClient(
         {
           name: form.name,
+          email: form.email,
+          company_name: form.company_name,
+          phone: form.phone,
           category: form.category,
           description: form.description,
           link: form.link,
+          notes: form.notes,
           status: form.status,
         },
         editingId
@@ -131,32 +141,32 @@ export default function AdminClientsPage() {
     }
   }, [editingId, form, loadClients, resetForm, submitting])
 
-  const handleDelete = useCallback(
-    async (id: string) => {
-      const confirmed = window.confirm("Delete this client?")
+  const handleDelete = useCallback(async (id: string) => {
+    const confirmed = window.confirm("Delete this client?")
+    if (!confirmed) {
+      return
+    }
 
-      if (!confirmed) {
-        return
-      }
-
-      try {
-        await removeClient(id)
-        setMessage("Client deleted.")
-        await loadClients()
-      } catch (error) {
-        setMessage(getErrorMessage(error, "Unable to delete client."))
-      }
-    },
-    [loadClients]
-  )
+    try {
+      await removeClient(id)
+      setMessage("Client deleted.")
+      await loadClients()
+    } catch (error) {
+      setMessage(getErrorMessage(error, "Unable to delete client."))
+    }
+  }, [loadClients])
 
   const handleEdit = useCallback((client: Client) => {
     setEditingId(client.id)
     setForm({
       name: client.name,
+      email: client.email || "",
+      company_name: client.company_name || "",
+      phone: client.phone || "",
       category: client.category || "",
       description: client.description || "",
       link: client.link,
+      notes: client.notes || "",
       status: client.status,
     })
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -194,35 +204,19 @@ export default function AdminClientsPage() {
       <div className="mt-8 grid gap-5 xl:grid-cols-[0.92fr_1.08fr]">
         <section className="saintce-inset rounded-[28px] p-6">
           <div className="grid gap-4">
-            <input
-              placeholder="Client name"
-              value={form.name}
-              onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-              className="saintce-input"
-            />
-            <input
-              placeholder="Category"
-              value={form.category}
-              onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))}
-              className="saintce-input"
-            />
-            <input
-              placeholder="Project link"
-              value={form.link}
-              onChange={(e) => setForm((prev) => ({ ...prev, link: e.target.value }))}
-              className="saintce-input"
-            />
-            <textarea
-              placeholder="Description"
-              value={form.description}
-              onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
-              className="saintce-input min-h-[180px]"
-            />
-            <select
-              value={form.status}
-              onChange={(e) => setForm((prev) => ({ ...prev, status: e.target.value as ClientStatus }))}
-              className="saintce-input"
-            >
+            <input placeholder="Client name" value={form.name} onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))} className="saintce-input" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <input placeholder="Client email" value={form.email} onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))} className="saintce-input" />
+              <input placeholder="Phone" value={form.phone} onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))} className="saintce-input" />
+            </div>
+            <input placeholder="Company name" value={form.company_name} onChange={(e) => setForm((prev) => ({ ...prev, company_name: e.target.value }))} className="saintce-input" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <input placeholder="Category" value={form.category} onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))} className="saintce-input" />
+              <input placeholder="Project link" value={form.link} onChange={(e) => setForm((prev) => ({ ...prev, link: e.target.value }))} className="saintce-input" />
+            </div>
+            <textarea placeholder="Description" value={form.description} onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))} className="saintce-input min-h-[140px]" />
+            <textarea placeholder="Internal notes" value={form.notes} onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))} className="saintce-input min-h-[140px]" />
+            <select value={form.status} onChange={(e) => setForm((prev) => ({ ...prev, status: e.target.value as ClientStatus }))} className="saintce-input">
               <option value="live">Live</option>
               <option value="beta">Beta</option>
               <option value="private">Private</option>
@@ -247,24 +241,20 @@ export default function AdminClientsPage() {
         <section className="saintce-inset rounded-[28px] p-6">
           <div className="space-y-3">
             {clients.map((client) => (
-              <div
-                key={client.id}
-                className="flex flex-col gap-4 rounded-[22px] border border-[var(--border-soft)] px-4 py-4 md:flex-row md:items-center md:justify-between"
-              >
+              <div key={client.id} className="flex flex-col gap-4 rounded-[22px] border border-[var(--border-soft)] px-4 py-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <p className="text-lg text-[var(--text-primary)]">{client.name}</p>
                   <p className="mt-1 text-sm text-[var(--muted)]">
-                    {client.category || "Uncategorized"} · {client.status}
+                    {client.company_name || client.category || "Uncategorized"} · {client.status}
                   </p>
+                  {(client.email || client.phone) && (
+                    <p className="mt-1 text-sm text-[var(--muted)]">{client.email || "No email"} · {client.phone || "No phone"}</p>
+                  )}
                 </div>
 
                 <div className="flex gap-3">
-                  <button onClick={() => handleEdit(client)} className="saintce-button saintce-button--ghost">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(client.id)} className="saintce-button saintce-button--ghost">
-                    Delete
-                  </button>
+                  <button onClick={() => handleEdit(client)} className="saintce-button saintce-button--ghost">Edit</button>
+                  <button onClick={() => handleDelete(client.id)} className="saintce-button saintce-button--ghost">Delete</button>
                 </div>
               </div>
             ))}
