@@ -36,6 +36,7 @@ async function verifyPortalClient(
     .single()
 
   if (clientError || !client) return null
+  const clientRecord = client as Record<string, unknown>
 
   // Confirm the invoice belongs to this client by tracing the chain
   const { data: invoiceRow, error: invoiceError } = await admin
@@ -53,13 +54,17 @@ async function verifyPortalClient(
 
   if (invoiceError || !invoiceRow) return null
 
-  // Traverse the nested join result
-  const sub = Array.isArray(invoiceRow.subscription) ? invoiceRow.subscription[0] : invoiceRow.subscription
-  const svc = sub && typeof sub === "object" ? (Array.isArray((sub as Record<string,unknown>).service) ? ((sub as Record<string,unknown>).service as Array<Record<string,unknown>>)[0] : (sub as Record<string,unknown>).service) : null
-  const proj = svc && typeof svc === "object" ? (Array.isArray((svc as Record<string,unknown>).project) ? ((svc as Record<string,unknown>).project as Array<Record<string,unknown>>)[0] : (svc as Record<string,unknown>).project) : null
-  const clientId = proj && typeof proj === "object" ? (proj as Record<string,unknown>).client_id : null
+  // Traverse the nested join result (cast away Supabase's inferred never on deep joins)
+  const row = invoiceRow as Record<string, unknown>
+  const rawSub = row.subscription
+  const sub = Array.isArray(rawSub) ? (rawSub as Record<string, unknown>[])[0] : (rawSub as Record<string, unknown> | null)
+  const rawSvc = sub?.service
+  const svc = Array.isArray(rawSvc) ? (rawSvc as Record<string, unknown>[])[0] : (rawSvc as Record<string, unknown> | null)
+  const rawProj = svc?.project
+  const proj = Array.isArray(rawProj) ? (rawProj as Record<string, unknown>[])[0] : (rawProj as Record<string, unknown> | null)
+  const clientId = proj?.client_id ?? null
 
-  if (clientId !== client.id) return null
+  if (clientId !== clientRecord.id) return null
 
   return { userId: authData.user.id, email }
 }

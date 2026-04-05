@@ -68,7 +68,7 @@ async function runBillingCycle(request: Request, isGet = false) {
       notifications_sent: notifications.notificationsSent + suspensions.sent,
       notifications_skipped: notifications.skipped + suspensions.skipped,
       duration_ms: Date.now() - startedAt,
-    } as never).then(() => undefined).catch(() => undefined)
+    } as never).then(() => undefined, () => undefined)
 
     return Response.json({
       success: true,
@@ -91,7 +91,7 @@ async function runBillingCycle(request: Request, isGet = false) {
       notifications_sent: 0,
       notifications_skipped: 0,
       duration_ms: 0,
-    } as never).then(() => undefined).catch(() => undefined)
+    } as never).then(() => undefined, () => undefined)
 
     return Response.json({ error: getErrorMessage(error, "Unable to run billing automation.") }, { status: 500 })
   }
