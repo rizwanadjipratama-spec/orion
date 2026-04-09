@@ -28,10 +28,12 @@ export default function SmoothScroll({
     }
 
     const lenis = new Lenis({
-      lerp: 0.1,
+      lerp: 0.075,
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.25,
+      syncTouch: true,
+      syncTouchLerp: 0.12,
       infinite: false,
     })
 

@@ -201,7 +201,7 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 z-100 w-full px-4 pt-4 md:px-8">
       <div className="saintce-nav mx-auto flex h-19.5 max-w-365 items-center justify-between px-6 md:px-8">
-        <div className="flex min-w-0 items-center gap-3">
+        <div className="flex w-10 min-w-0 items-center gap-3 md:w-auto md:flex-1">
           <div className="hidden items-center text-sm text-(--muted-strong) md:flex">
             <AnimatePresence mode="wait">
               {isRouteMode ? (
@@ -238,15 +238,6 @@ export default function Navbar() {
               )}
             </AnimatePresence>
           </div>
-
-          {auth.ready && !auth.isAuthenticated && (
-            <Link
-              href="/contact"
-              className="saintce-button min-h-9.5 px-5 text-sm md:hidden"
-            >
-              Sign Up
-            </Link>
-          )}
 
           {auth.ready && auth.isAuthenticated && (
             <div className="relative md:hidden" ref={mobileAvatarRef}>
@@ -291,11 +282,11 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="absolute left-1/2 -translate-x-1/2 select-none font-display text-sm tracking-[0.32em] text-(--text-primary)">
+        <div className="pointer-events-none absolute left-1/2 z-10 max-w-[45vw] -translate-x-1/2 truncate select-none font-display text-sm tracking-[0.32em] text-(--text-primary) md:max-w-none">
           {siteConfig.brand.name}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex w-10 items-center justify-end gap-3 md:w-auto md:flex-1">
           {auth.ready && !auth.isAuthenticated && !isRouteMode && (
             <Link
               href="/contact"

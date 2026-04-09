@@ -3,6 +3,8 @@
 import { useCallback } from "react"
 import { useRouter } from "next/navigation"
 import type { HeroContent } from "@/lib/site-sections"
+import ScrollReveal from "@/components/effects/ScrollReveal"
+import HeadingReveal from "@/components/effects/HeadingReveal"
 
 export default function Hero({ content }: { content: HeroContent }) {
   const router = useRouter()
@@ -16,14 +18,17 @@ export default function Hero({ content }: { content: HeroContent }) {
       <div className="mx-auto w-full max-w-[1400px] px-6 md:px-10">
         <div className="saintce-hero">
           <div className="grid gap-12 lg:grid-cols-[1.25fr_0.75fr]">
-            <div>
+            <ScrollReveal y={24}>
               <p className="mb-6 font-mono text-[0.75rem] uppercase tracking-[0.18em] text-[var(--signal)]">
                 {content.eyebrow}
               </p>
 
-              <h1 className="max-w-5xl font-display text-[clamp(3.5rem,8vw,8rem)] leading-[0.96] tracking-[-0.045em] text-[var(--text-primary)]">
-                {content.title}
-              </h1>
+              <HeadingReveal
+                as="h1"
+                text={content.title}
+                className="max-w-5xl font-display text-[clamp(3.5rem,8vw,8rem)] leading-[0.96] tracking-[-0.045em] text-[var(--text-primary)]"
+                delay={0.06}
+              />
 
               <p className="mt-8 max-w-[640px] text-[1rem] leading-[1.85] text-[var(--muted)] md:text-[1.08rem]">
                 {content.description}
@@ -34,9 +39,9 @@ export default function Hero({ content }: { content: HeroContent }) {
                   {content.primaryLabel}
                 </button>
               </div>
-            </div>
+            </ScrollReveal>
 
-            <div className="saintce-panel saintce-panel--inset flex flex-col justify-between gap-8 p-6 md:p-8">
+            <ScrollReveal delay={0.08} y={24} className="saintce-panel saintce-panel--inset flex flex-col justify-between gap-8 p-6 md:p-8">
               <div>
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-[var(--muted)]">
                   {content.panelEyebrow}
@@ -67,7 +72,7 @@ export default function Hero({ content }: { content: HeroContent }) {
                 <span>{content.footerLeft}</span>
                 <span>{content.footerRight}</span>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </div>

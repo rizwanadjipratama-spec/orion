@@ -6,6 +6,8 @@ import Section from "@/components/ui/Section"
 import Container from "@/components/ui/Container"
 import { siteConfig } from "@/lib/site-config"
 import type { CtaContent } from "@/lib/site-sections"
+import ScrollReveal from "@/components/effects/ScrollReveal"
+import HeadingReveal from "@/components/effects/HeadingReveal"
 
 export default function CTA({ content }: { content: CtaContent }) {
   const router = useRouter()
@@ -17,11 +19,13 @@ export default function CTA({ content }: { content: CtaContent }) {
   return (
     <Section id="contact">
       <Container>
-        <div className="saintce-panel mx-auto max-w-[980px] px-6 py-8 text-center md:px-10 md:py-12">
+        <ScrollReveal className="saintce-panel mx-auto max-w-[980px] px-6 py-8 text-center md:px-10 md:py-12" y={20}>
           <p className="font-mono text-[0.75rem] uppercase tracking-[0.16em] text-[var(--signal)]">{content.eyebrow}</p>
-          <h2 className="mt-5 font-display text-[clamp(2.5rem,5vw,5rem)] leading-[1.02] tracking-[-0.04em] text-[var(--text-primary)]">
-            {content.title}
-          </h2>
+          <HeadingReveal
+            text={content.title}
+            className="mt-5 font-display text-[clamp(2.5rem,5vw,5rem)] leading-[1.02] tracking-[-0.04em] text-[var(--text-primary)]"
+            delay={0.04}
+          />
           <p className="mx-auto mt-6 max-w-[680px] text-[1rem] leading-[1.8] text-[var(--muted)]">
             {content.description}
           </p>
@@ -37,7 +41,7 @@ export default function CTA({ content }: { content: CtaContent }) {
               {siteConfig.contact.email}
             </a>
           </div>
-        </div>
+        </ScrollReveal>
       </Container>
     </Section>
   )
